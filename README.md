@@ -1,6 +1,6 @@
 # Event Data Pipeline with Dremio, Nessie, and Apache Iceberg
 
-This project uses a python script to simulate an ingestion an ELT (Extract, Load, Transform) pipeline that processes JSON event data through MinIO (S3-compatible storage), Dremio, and Apache Iceberg with Nessie version control.
+This project uses a python script to simulate an ingestion ELT (Extract, Load, Transform) pipeline that processes JSON event data through MinIO (S3-compatible storage), Dremio, and Apache Iceberg with Nessie version control.
 Credit to Dremio 
 https://www.dremio.com/blog/intro-to-dremio-nessie-and-apache-iceberg-on-your-laptop/
 ## Architecture Overview
@@ -110,7 +110,7 @@ This container:
 ## Running the Pipeline
 
 The pipeline performs the following steps:
-The script is idempotent meaning re-running won't make duplicates in the warehouse  
+The script is idempotent meaning re-running won't make duplicates in the warehouse.
 The script follows W.A.P. Write -> Audit -> Publish using Nessie catalog with Apache Iceberg with  
 Dremio as the compute /sql engine 
 1. Reads JSON event data
@@ -119,7 +119,7 @@ Dremio as the compute /sql engine
 4. Creates a new Nessie branch
 5. Loads data into an Iceberg table
 6. Performs validation
-7. Merges changes to main branch
+7. Merges changes to main branch if validation passes.
 
 To run the pipeline:
 ```bash
@@ -127,8 +127,8 @@ docker exec simulate-ingestion-elt python app/main.py
 ```
 
 ## Analytical SQL query results
-Do to the sample JSON being only 1 days worth of events 2023-01-01, queries looking back a week from CURRENT_TIMESTAMP   
-won't return results I made some changes to the queries to show results based on the sample event timestamps
+Due to the sample JSON being only 1 days worth of events on 2023-01-01, queries looking back a week from CURRENT_TIMESTAMP   
+won't return results. I made some changes to the queries to show results based on the sample event timestamps
 
 ![dremio_sql_result_4](https://github.com/user-attachments/assets/b22de3ff-f8dc-4103-83b3-130f965852d2)
 
@@ -149,4 +149,5 @@ Additional tables and schema details can be found in `sql/DDL-sample-dw.sql`.
 - **Error Handling**: Includes branch cleanup on failure
 
 ## Next Steps
-- Add transformations to add dimension surrogate_keys to the fact_events table for better joins 
+- Add transformations to add dimension surrogate_keys to the fact_events table for better joins
+- add unit tests with pytest
